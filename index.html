@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<title>Drone Building Workflow</title>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<link rel="stylesheet" href="css/normalize.css">
+	<link rel="stylesheet" href="css/skeleton.css">
+	<style>
+	#map-canvas { width: 100%; height: 300px; }
+	</style>
+</head>
+<body>
+
+	<div class="container">
+		<div class="row">
+			<div class="one-half column">
+				<form id="search-form">
+					<input id="search-input" type="text" value="San Francisco, CA" />
+					<input id="search-sibmit" type="submit" value="Search" />
+				</form>
+				<div id="map-canvas"></div>
+			</div>
+			<div class="one-half column">
+				<h4>Drone Building Workflow</h4>
+				<p>Draw a region on the map, specify a height, and see flight information of how the drone would fly to generate a 3D reconstruction of that building.</p>
+			</div>
+		</div>
+	</div>
+
+	<script src="https://maps.googleapis.com/maps/api/js?v=3&libraries=drawing,geometry"></script>
+	<script src="scripts/DroneBuildingWorkflow.js"></script>
+
+</body>
+</html>
