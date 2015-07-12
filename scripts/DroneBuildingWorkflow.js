@@ -1,6 +1,11 @@
 ;(function() {
 'use strict';
 
+// constants
+// (I'm guessing at these)
+var DRONE_SPEED = 6.7056; // 15mph expressed in meters/second
+var DRONE_IMAGERY_HEIGHT = 5; // meters
+
 function DroneBuildingWorkflow(options) {
 	this.initialize(options);
 }
@@ -13,7 +18,7 @@ DroneBuildingWorkflow.prototype.initialize = function(options) {
 	};
 	
 	// the Google map
-	this.map = new google.maps.Map(document.getElementById(options.ids['map']), mapOptions);
+	this.map = new google.maps.Map(document.getElementById(options.ids.map), mapOptions);
 
 	// ids of relevant DOM elements
 	this.ids = options.ids;
@@ -25,12 +30,21 @@ DroneBuildingWorkflow.prototype.initialize = function(options) {
 }
 
 DroneBuildingWorkflow.prototype.initializeFlight = function() {
-	this.flight = new google.maps.MVCObject();
+	var flight = this.flight = new google.maps.MVCObject();
 	this.flight.setValues({
 		perimeter: 0,
 		area: 0,
 		height: 0
 	});
+	
+	// height listener
+	var heightInput = document.getElementById(this.ids.height);
+	google.maps.event.addDomListener(heightInput, 'change', function(e) {
+		var height = parseFloat(this.value);
+		flight.set('height', height);
+	});
+	var height = parseFloat(heightInput.value);
+	this.flight.set('height', height);
 	
 	var renderInfo = this.renderInfo.bind(this);
 	google.maps.event.addListener(this.flight, 'perimeter_changed', renderInfo);
@@ -39,17 +53,25 @@ DroneBuildingWorkflow.prototype.initializeFlight = function() {
 }
 
 DroneBuildingWorkflow.prototype.renderInfo = function() {
-	var perimeter = this.flight.get('perimeter').toFixed(0);
-	var area = this.flight.get('area').toFixed(0);
-	var height = this.flight.get('height').toFixed(0);
-	console.log(perimeter + 'm', area + 'm^2');
+	var perimeter = this.flight.get('perimeter');
+	var area = this.flight.get('area');
+	var height = this.flight.get('height');
+	
+	document.getElementById(this.ids.perimeter).value = perimeter.toFixed(0);
+	document.getElementById(this.ids.area).value = area.toFixed(0);
+	
+	var timePerLap = (perimeter + DRONE_IMAGERY_HEIGHT) / DRONE_SPEED;
+	document.getElementById(this.ids.timePerLap).value = timePerLap.toFixed(0);
+	
+	var timeTotal = timePerLap * height;
+	document.getElementById(this.ids.timeTotal).value = timeTotal.toFixed(0);
 }
 
 DroneBuildingWorkflow.prototype.initializeGeocoder = function() {
 	// geocoder search
 	var geocoder = new google.maps.Geocoder();
-	var input = document.getElementById(this.ids['search-input']);
-	var form = document.getElementById(this.ids['search-form']);
+	var input = document.getElementById(this.ids.searchInput);
+	var form = document.getElementById(this.ids.searchForm);
 	var map = this.map;
 	
 	function searchLocation() {
@@ -210,9 +232,14 @@ function initialize() {
 		center: {lat: 37.792, lng: -122.403},
 		zoom: 17,
 		ids: {
-			'map': 'map-canvas',
-			'search-form': 'search-form',
-			'search-input': 'search-input'
+			map: 'map-canvas',
+			searchForm: 'search-form',
+			searchInput: 'search-input',
+			height: 'height',
+			perimeter: 'perimeter',
+			area: 'area',
+			timePerLap: 'time-per-lap',
+			timeTotal: 'time-total'
 		}
 	};
 	new DroneBuildingWorkflow(options);

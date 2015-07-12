@@ -8,22 +8,70 @@
 	<link rel="stylesheet" href="css/skeleton.css">
 	<style>
 	#map-canvas { width: 100%; height: 300px; }
+	input[type=number] { width: 70px; }
 	</style>
 </head>
 <body>
 
-	<div class="container">
+	<div class="">
+		<h2>Drone Building Workflow</h2>
 		<div class="row">
-			<div class="one-half column">
+			<div class="eight columns">
 				<form id="search-form">
 					<input id="search-input" type="text" value="San Francisco, CA" />
 					<input id="search-sibmit" type="submit" value="Search" />
 				</form>
 				<div id="map-canvas"></div>
 			</div>
-			<div class="one-half column">
-				<h4>Drone Building Workflow</h4>
+			<div class="four columns">
+				
 				<p>Draw a region on the map, specify a height, and see flight information of how the drone would fly to generate a 3D reconstruction of that building.</p>
+			</div>
+		</div>
+		
+		<div class="row">
+			<div class="four columns">
+				<label for="height">Height</label>
+			</div>
+			<div class="eight columns">
+				<input type="number" id="height" value="6" step="3" min="0" />
+				<span class="units">m</span>
+			</div>
+		</div>
+		<div class="row">
+			<div class="four columns">
+				<label>Perimeter</label>
+			</div>
+			<div class="eight columns">
+				<output id="perimeter">(unknown)</output>
+				<span class="units">m</span>
+			</div>
+		</div>
+		<div class="row">
+			<div class="four columns">
+				<label>Area</label>
+			</div>
+			<div class="eight columns">
+				<output id="area">(unknown)</output>
+				<span class="units">m<sup>2</sup></span>
+			</div>
+		</div>
+		<div class="row">
+			<div class="four columns">
+				<label>Time per lap</label>
+			</div>
+			<div class="eight columns">
+				<output id="time-per-lap">(unknown)</output>
+				<span class="units">s</span>
+			</div>
+		</div>
+		<div class="row">
+			<div class="four columns">
+				<label>Total time</label>
+			</div>
+			<div class="eight columns">
+				<output id="time-total">(unknown)</output>
+				<span class="units">s</span>
 			</div>
 		</div>
 	</div>
