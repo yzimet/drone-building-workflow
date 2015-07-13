@@ -8,13 +8,30 @@
 	<link rel="stylesheet" href="css/skeleton.css">
 	<style>
 	#map-canvas { width: 100%; height: 300px; }
+	form { margin-bottom: 0.5rem; }
+	input { margin-bottom: 0; }
 	input[type=number] { width: 70px; }
+	output { color: green; font-weight: bold; }
+	.explanation { font-size: smaller; }
+	tr.showForCircle { display: none; }
+	#data-table[data-shape=circle] tr.showForCircle { display: table-row; }
 	</style>
 </head>
 <body>
 
-	<div class="">
+	<div class="container">
 		<h2>Drone Building Workflow</h2>
+		<h6>This is a tool to draw a shape on the map, specify a height, and see flight information of how a drone would fly to generate a 3D reconstruction of that building.</h6>
+		
+		<ol class="instructions">
+			<li>Use the shape toolbar at the top of the map to select and draw a circle, rectangle, or polygon.</li>
+			<li>Drag the shape to reposition it, or drag a handle/vertex to resize it.</li>
+			<li>Set the height field to the height of the building.</li>
+			<li>The green data values will update to reflect the shape size.</li>
+			<li>Place a marker on the map to set the drone's landing location.</li>
+			<li>Select and draw a new shape to replace an existing shape on the map.</li>
+		</ol>
+		
 		<div class="row">
 			<div class="eight columns">
 				<form id="search-form">
@@ -24,54 +41,65 @@
 				<div id="map-canvas"></div>
 			</div>
 			<div class="four columns">
-				
-				<p>Draw a region on the map, specify a height, and see flight information of how the drone would fly to generate a 3D reconstruction of that building.</p>
-			</div>
-		</div>
-		
-		<div class="row">
-			<div class="four columns">
-				<label for="height">Height</label>
-			</div>
-			<div class="eight columns">
-				<input type="number" id="height" value="6" step="3" min="0" />
-				<span class="units">m</span>
-			</div>
-		</div>
-		<div class="row">
-			<div class="four columns">
-				<label>Perimeter</label>
-			</div>
-			<div class="eight columns">
-				<output id="perimeter">(unknown)</output>
-				<span class="units">m</span>
-			</div>
-		</div>
-		<div class="row">
-			<div class="four columns">
-				<label>Area</label>
-			</div>
-			<div class="eight columns">
-				<output id="area">(unknown)</output>
-				<span class="units">m<sup>2</sup></span>
-			</div>
-		</div>
-		<div class="row">
-			<div class="four columns">
-				<label>Time per lap</label>
-			</div>
-			<div class="eight columns">
-				<output id="time-per-lap">(unknown)</output>
-				<span class="units">s</span>
-			</div>
-		</div>
-		<div class="row">
-			<div class="four columns">
-				<label>Total time</label>
-			</div>
-			<div class="eight columns">
-				<output id="time-total">(unknown)</output>
-				<span class="units">s</span>
+				<table id="data-table">
+					<tr>
+						<th>
+							<label for="height">Height</label>
+						</th>
+						<td>
+							<input type="number" id="height" value="6" step="3" min="0" />
+							<span class="units">m</span>
+						</td>
+					</tr>
+					<tr class="showForCircle">
+						<th>
+							<label for="radius">Radius</label>
+						</th>
+						<td>
+							<input type="number" id="radius" value="0" step="1" min="0" />
+							<span class="units">m</span>
+						</td>
+					</tr>
+					<tr>
+						<th>Perimeter</th>
+						<td>
+							<output id="perimeter">(unknown)</output>
+							<span class="units">m</span>
+						</td>
+					</tr>
+					<tr>
+						<th>Area</th>
+						<td>
+							<output id="area">(unknown)</output>
+							<span class="units">m<sup>2</sup></span>
+						</td>
+					</tr>
+					<tr>
+						<td class="explanation" colspan="2">
+							The following times are based on the drone's average speed of <output id="drone-speed">0</output> <span class="units">m/s</span>. The onboard camera will capture <output id="drone-imagery-height">0</output> <span class="units">m</span> of height at a time; therefore, to capture the entire building the drone must fly <output id="num-laps">(unknown)</output> laps around the perimeter at increasing altitudes.
+						</td>
+					</tr>
+					<tr>
+						<th>Time per lap</th>
+						<td>
+							<output id="time-per-lap">(unknown)</output>
+							<span class="units">s</span>
+						</td>
+					</tr>
+					<tr>
+						<th>Time to top</th>
+						<td>
+							<output id="time-total">(unknown)</output>
+							<span class="units">s</span>
+						</td>
+					</tr>
+					<tr>
+						<td colspan="2">
+							<label>Landing location</label>
+							<output id="landing-location">(unspecified)</output>
+						</td>
+					</tr>
+				</table>					
 			</div>
 		</div>
 	</div>
